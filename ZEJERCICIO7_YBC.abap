@@ -13,20 +13,13 @@ DATA: tl_clientes TYPE TABLE OF ztybc_clientes,
       wl_clavekna1 like zkna1-clave.
 
 SELECT * FROM ztybc_clientes INTO TABLE tl_clientes.
+SELECT * FROM zkna1 INTO TABLE tl_kna1.
 
-  write:/ 'clave clientes: ', wl_claveclientes.
-
-if wl_claveclientes = wl_clavekna1.
-  write:/'CORRECTO'.
-  ELSE.
-    write:/'INCORRECTO'.
-endif.
-
-*write:/ SY-ULINE.
-*write:/ SY-ULINE.
-*
-*SELECT * FROM zkna1 INTO TABLE tl_kna1.
-*
-*loop at tl_kna1 into wa_kna1.
-*  write:/ 'Clave: ', wa_kna1-clave.
-*ENDLOOP.
+loop at tl_clientes into wa_cliente.
+  read table tl_kna1 into wa_kna1 with key clave = wa_kna1-clave.
+  if SY-SUBRC = 0.
+    write:/ 'EXITO! Los campos son iguales'.
+  else.
+    write:/ 'ERROR! Los campos son distintos'.
+  endif.
+endloop.
